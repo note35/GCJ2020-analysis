@@ -6,10 +6,10 @@ Run this script to merge all results into one file
 '''
 
 import json
-from crawler import CODEJAM_ROUND
+from rank_crawler import CODEJAM_ROUND
 
 
-RESULT_FILE_NAME = 'all_data_by_rank.json'
+RESULT_FILE_NAME = 'round_1a_by_rank.json'
 
 def save_to_file(res):
     with open(RESULT_FILE_NAME, 'w') as f:
@@ -19,7 +19,7 @@ def save_to_file(res):
 
 d = {}
 total = 0
-for i in ['200', '50', '10', '5', '1']:
+for i in ['50', '25', '5', '1']:
     with open(f'{CODEJAM_ROUND}_{i}.json') as f:
         users = json.loads(f.read())
 

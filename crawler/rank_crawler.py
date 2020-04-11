@@ -16,10 +16,12 @@ import urllib.request
 
 # Qualification Round
 # https://codingcompetitions.withgoogle.com/codejam/round/000000000019fd27
-CODEJAM_ROUND = '000000000019fd27'
+# Round 1A
+# https://codingcompetitions.withgoogle.com/codejam/round/000000000019fd74
+CODEJAM_ROUND = '000000000019fd74'
 URL = f'https://codejam.googleapis.com/scoreboard/{CODEJAM_ROUND}/poll?p='
-NUMS_CONSECUTIVE_USERS = 50
-LAST_NUMS_CONSECUTIVE_USERS = 200
+NUMS_CONSECUTIVE_USERS = 1
+LAST_NUMS_CONSECUTIVE_USERS = 5
 RATE_LIMIT = 0.05
 SSL_CONTEXT = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
 
@@ -56,15 +58,17 @@ class RankCrawler:
 def query_missed():
     # In GCJ 2020 - Qual round, few data are broken caused the API unable to return parsable data
     # NUMS_CONSECUTIVE_USERS: 200
-    missed = [7401, 8401, 9601, 9801, 10401, 11601, 12001, 12601, 13601, 14401, 14601, 14801, 15401, 19001, 19201, 19401, 20401, 21001, 27201, 28001, 28401, 30601, 31801, 32201, 34401, 35201, 37201, 38001, 38201, 39001, 39801, 40801, 41601]
+    # missed = [7401, 8401, 9601, 9801, 10401, 11601, 12001, 12601, 13601, 14401, 14601, 14801, 15401, 19001, 19201, 19401, 20401, 21001, 27201, 28001, 28401, 30601, 31801, 32201, 34401, 35201, 37201, 38001, 38201, 39001, 39801, 40801, 41601]
     # NUMS_CONSECUTIVE_USERS: 50
     # missed = [7501, 8401, 9801, 12051, 12601, 14451, 14601, 14801, 15501, 19001, 19301, 19501, 20401, 27251, 28401, 32251, 34451, 35351, 37301, 38001, 39001, 39101, 39801, 40951]
     # NUMS_CONSECUTIVE_USERS: 10
     # missed = [7526, 8401, 9826, 12051, 12076, 14601, 14826, 15526, 19026, 19501, 20401, 27251, 28426, 32251, 34451, 35376, 37301, 38001, 39026, 39801, 40951]
     # NUMS_CONSECUTIVE_USERS: 5
     # missed = [7541, 8401, 9826, 12081, 14621, 19031, 20406, 27266, 28431, 32271, 34466, 35376, 37301, 38006, 39031, 39821, 40951]
-    # NUMS_CONSECUTIVE_USERS: 1 (broken data)
+    # NUMS_CONSECUTIVE_USERS: 1 (broken data (Qualification Round))
     # missed = [7544, 8401, 9827, 12085, 14624, 19035, 20409, 27270, 28434, 32273, 34470, 35376, 37301, 38010, 39035, 39825, 40953]
+    # NUMS_CONSECUTIVE_USERS: 1 (broken data (Round 1A))
+    # [1250, 5059, 9041, 9598]
     rc = RankCrawler(URL)
     user_res = []
     failed = []
@@ -101,12 +105,12 @@ def query_all():
         except:
             failed.append(offset)
             print(f'failed at offset: {offset}')
+            offset += NUMS_CONSECUTIVE_USERS
             continue
         if len(resp['user_scores']) == 0:
             break
         user_res += resp['user_scores']
-        offset += 200
-        break
+        offset += NUMS_CONSECUTIVE_USERS
     print(failed)
     return user_res
 
